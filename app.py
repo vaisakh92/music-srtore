@@ -22,7 +22,7 @@ def main():
 def logout():
    session.pop('username', None)
    session.pop('user_id', None)
-   return redirect(url_for('index'))
+   return render_template('index.html')
 
 @app.route('/login',methods = ['POST', 'GET'])
 def login():
@@ -33,12 +33,13 @@ def login():
       cursor.execute("SELECT * from user where email_id='" + email_id + "' and password='" + password + "'")
       data = cursor.fetchone()
       if data is None:
-         return "Username or Password is wrong"
+        flash("Invalid Email ID or password") 
+        return render_template('login.html')
       else:
          session['username'] = email_id
          
          session['user_id'] = data[0]
-      flash("Welcome Back")   
+        
       return redirect(url_for('home'))
     else:
       return render_template('login.html')
@@ -51,16 +52,22 @@ def register():
       Phone_number = request.form['phone_number']
       Email_id = request.form['email_id']
       Password = request.form['password']
-      
       qry = " INSERT INTO `user` ( User_name, Address, Phone_number, Email_id, Password ) values " 
       qry += "('"+User_name +"','"+Address +"','"+Phone_number +"','"+Email_id +"','"+Password +"')"
       conn = mysql.connect()
       cursor = conn.cursor()
-      cursor.execute(qry)
-      conn.commit()
-      session['username'] = Email_id
-      flash("Welcome to Estore.")
-      return redirect(url_for('home'))    
+      try:
+        x = cursor.execute(qry)
+        if x == 1:
+            conn.commit()
+            cursor.execute("SELECT * from user where email_id='" + Email_id + "' and password='" + Password + "'")
+            data = cursor.fetchone()  
+            session['username'] = Email_id
+            session['user_id'] = data[0]
+            return redirect(url_for('home'))
+      except :
+          flash("Email ID already registered.")
+          return redirect(url_for('register')) 
     return render_template('register.html')
 @app.route('/home',methods = ['POST', 'GET'])
 def home():    

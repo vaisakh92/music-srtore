@@ -4,8 +4,8 @@
   {% if messages %}
     <ul class=flashes>
     {% for message in messages %}
-    <div class="alert alert-success">
-        <strong>Success!</strong> {{message}}
+    <div class="alert alert-danger">
+        <strong>Error!!! </strong> {{message}}
       </div>
     {% endfor %}
     </ul>
@@ -43,7 +43,7 @@
                         <div class="col-md-6">
                            <div class="form-group">
                                <label>Phone Number <span style="color:red;"> * </span></label>
-                               <input type="text" class="form-control" name="phone_number" placeholder="Enter Phone No." id="phone_number" required>
+                               <input type="number" class="form-control" name="phone_number" placeholder="Enter Phone No." id="phone_number" required>
                            </div>
                         </div>
                         <div class="col-md-6">
@@ -55,7 +55,7 @@
                         <div class="col-md-6">
                            <div class="form-group">
                                <label>Password <span style="color:red;"> * </span></label>
-                               <input type="passsword" class="form-control" name="password" placeholder="Enter Password" id="password" required>
+                               <input type="password" class="form-control" name="password" minlength="8" placeholder="Enter Password" id="password" required>
                            </div>
                         </div>
 
