@@ -13,7 +13,13 @@
               <h6 class="card-subtitle">Album : {{card[3]}}</h6><br/>
               <h6 class="card-subtitle">Artist : {{card[4]}}</h6><br/>
               <a href="{{card[2]}}" class="btn btn-primary">Go somewhere</a>
+              {% if card[5] == session['user_id'] %}
+              <form method="POST" action="delete">
+                  <input type="hidden" value="{{card[0]}}">
+                  <input type="submit" value="Delete" class="btn btn-danger" style="float: right;">
+              </form>
             </div>
+              {% endif %}
           </div>
         </div>
         {% endfor %}
