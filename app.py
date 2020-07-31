@@ -101,9 +101,17 @@ def add():
         flash("File Uploaded Sucess")
         return render_template('add.html')
     return render_template('add.html')
-@app.route('/list',methods = ['POST', 'GET'])
-def _list():
-    return render_template('list.html')
+@app.route('/delete',methods = ['POST', 'GET'])
+def delete():
+    if request.method == "POST":
+        id = request.form['id']
+        qry = "DELETE FROM song_details WHERE song_id ='"+id+"'"
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute(qry)
+        conn.commit()
+        flash("Deleted file")
+        return redirect(url_for('home'))
 @app.route('/search',methods = ['POST', 'GET'])
 def search():
     if request.method == "POST":
