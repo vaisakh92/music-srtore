@@ -4,7 +4,8 @@ import os
 from werkzeug.utils import secure_filename
 import calendar
 import time
-
+import mutagen
+from datetime import date
 
 mysql = MySQL()
 app = Flask(__name__)
@@ -13,6 +14,7 @@ app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = 'music_store'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+   
 
 @app.route('/')
 def main():
@@ -70,10 +72,35 @@ def register():
           return redirect(url_for('register')) 
     return render_template('register.html')
 @app.route('/home',methods = ['POST', 'GET'])
-def home():    
-    return render_template('home.html')
+def home():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * from song_details") 
+    data = cursor.fetchall()   
+    return render_template('home.html',data=data)
 @app.route('/add',methods = ['POST', 'GET'])
 def add():
+    if request.method == "POST":
+        song = request.files['song']
+        mp3file = mutagen.File(song)
+        title = str(mp3file.tags.values()[2])
+        album = str(mp3file.tags.values()[1])
+        artist = str(mp3file.tags.values()[6])
+        filename = secure_filename(song.filename)
+        base = os.path.splitext(filename)[1]
+        ts = calendar.timegm(time.gmtime())
+        file_name =  str(ts)+base
+        song.save("static/song_uploads/"+ file_name)
+        destloc = "static/song_uploads/"+ file_name
+        qry = "INSERT INTO `song_details`(`song_title`, `song_path`, `song_album`, `song_artist`, `song_uploaded_by`) VALUES "
+        qry += '("'+title+'","'+str(destloc)+'","'+album+'","'+artist+'","'+str(session['user_id'])+'")'
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute(qry)
+        print(qry)
+        conn.commit()
+        flash("File Uploaded Sucess")
+        return render_template('add.html')
     return render_template('add.html')
 @app.route('/list',methods = ['POST', 'GET'])
 def _list():

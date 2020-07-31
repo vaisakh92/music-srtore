@@ -1,6 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
+{% if data %}
 <section>
-    <h1>Index</h1>
+    <h1>Enjoy...</h1>
+    <div class="row">
+        
+        {% for card in data%}
+        <div class="col-sm-6">
+         <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Song Title : {{card[1]}}</h5>
+              <h6 class="card-subtitle">Album : {{card[3]}}</h6><br/>
+              <h6 class="card-subtitle">Artist : {{card[4]}}</h6><br/>
+              <a href="{{card[2]}}" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
 </section>
+{% else %}
+<section>
+    <h1>Hi.. Nothing Uploaded Yet </h1>
+</section>
+{% endif %}
 {% endblock %}

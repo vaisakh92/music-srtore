@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+    <div class="alert alert-sucess">
+        <strong>Sucess!!! </strong> {{message}}
+      </div>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <section>
-    <h1>Index</h1>
+    <h1>Upload Song</h1>
+    <form action="{{ url_for('add') }}" enctype="multipart/form-data" method="POST">
+    <input type="file" id="song" name="song" accept=".mp3">
+    <br/>
+    <div class="col-md-6 " style="margin-top: 2rem;">
+        <input type="submit" class="btn btn-primary" name="submit" value="Upload"> 
+    </div>
+    </form>
 </section>
 {% endblock %}

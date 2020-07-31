@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 <section>
-    <h1>Index</h1>
+    <div  style="text-align: center;">
+        <form method="POST" action="">
+            <br/>
+            <br/>
+        <input type="text" class="col-8 col-sm-8 col-md-8 col-lg-8" name="search" id="search" value="Enter data"><br/>
+        <br/>
+        
+        <select name="type" id="type">
+            <option value="">Select</option>
+            <option value="title">Title</option>
+            <option value="album">Album</option>
+            <option value="artist">Artist</option>
+        </select>
+        <input type="submit" class="btn btn-primary" name="submit" id="submit">
+        </form>
+    </div>
 </section>
 {% endblock %}
