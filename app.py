@@ -91,9 +91,8 @@ def add():
         ts = calendar.timegm(time.gmtime())
         file_name =  str(ts)+base
         song.save("static/song_uploads/"+ file_name)
-        destloc = "static/song_uploads/"+ file_name
         qry = "INSERT INTO `song_details`(`song_title`, `song_path`, `song_album`, `song_artist`, `song_uploaded_by`) VALUES "
-        qry += '("'+title+'","'+str(destloc)+'","'+album+'","'+artist+'","'+str(session['user_id'])+'")'
+        qry += '("'+title+'","'+str(filename)+'","'+album+'","'+artist+'","'+str(session['user_id'])+'")'
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.execute(qry)
@@ -107,10 +106,36 @@ def _list():
     return render_template('list.html')
 @app.route('/search',methods = ['POST', 'GET'])
 def search():
+    if request.method == "POST":
+        data = request.form['search']
+        typ = request.form['type']
+        if typ == "title":
+            qry = "SELECT * FROM song_details WHERE song_title like '%"+data+"%'"
+        elif typ == "album":
+            qry = "SELECT * FROM song_details WHERE song_album like '%"+data+"%'"
+        elif typ == "artist":
+            qry = "SELECT * FROM song_details WHERE song_artist like '%"+data+"%'"
+        else:
+            flash("Illegal Option")
+            return redirect(url_for('search'))
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute(qry)
+        dat = cursor.fetchall()
+        return render_template('search.html',data=dat)                
     return render_template('search.html')
-@app.route('/play',methods = ['POST', 'GET'])
-def song():
-    return render_template('play.html')
+
+@app.route('/play',methods= ["GET"])
+def play():
+    if request.method == "GET":
+        stamp = request.args.get('stamp')
+        qry = "select * from song_details where song_path ='"+stamp+"'"
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute(qry)
+        dat = cursor.fetchone()
+        destloc = "static/song_uploads/"+stamp+".mp3"
+        return render_template('play.html',data = destloc,card=dat)
          
 if __name__ == '__main__':
    app.secret_key = 'super secret key'

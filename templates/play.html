@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 <section>
-    <h1>Index</h1>
+    {% if card %}
+    <div class="col-sm-9">
+        <div class="card" style="width: 35rem;">
+           <div class="card-body">
+             <h3><audio controls autoplay><source src="{{data}}" type="audio/mpeg">Your Player does not Support Audio</audio></h3>   
+             <h5 class="card-title">Song Title : {{card[1]}}</h5>
+             <h6 class="card-subtitle">Album : {{card[3]}}</h6><br/>
+             <h6 class="card-subtitle">Artist : {{card[4]}}</h6><br/>
+            </div>
+         </div>
+       </div>
+    {% endif %}   
 </section>
 {% endblock %}

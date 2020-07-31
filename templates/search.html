@@ -5,7 +5,7 @@
         <form method="POST" action="">
             <br/>
             <br/>
-        <input type="text" class="col-8 col-sm-8 col-md-8 col-lg-8" name="search" id="search" value="Enter data"><br/>
+        <input type="text" class="col-8 col-sm-8 col-md-8 col-lg-8" name="search" id="search" placeholder="Enter data"><br/>
         <br/>
         
         <select name="type" id="type">
@@ -17,5 +17,28 @@
         <input type="submit" class="btn btn-primary" name="submit" id="submit">
         </form>
     </div>
+    {% if data %}
+<section>
+    <h1>Enjoy...</h1>
+    <div class="row">
+        
+        {% for card in data%}
+        <div class="col-sm-6">
+         <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Song Title : {{card[1]}}</h5>
+              <h6 class="card-subtitle">Album : {{card[3]}}</h6><br/>
+              <h6 class="card-subtitle">Artist : {{card[4]}}</h6><br/>
+              <form method="GET" action="play">
+                  <input type="hidden" name="stamp" value="{{card[0]}}">
+              <input type="submit" value="Submit" class="btn btn-primary">
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 </section>
 {% endblock %}
