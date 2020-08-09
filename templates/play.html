@@ -1,14 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
+<script>
+  function share() {
+
+    const el = document.createElement("input");
+    el.style.height = '0px';
+    el.style.width = 'px';
+    document.body.appendChild(el);
+    el.value = window.location.href;
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    alert("Copied to clipboard.");
+    
+  }
+  </script>
+  
 <section>
     {% if card %}
     <div class="col-sm-9">
         <div class="card" style="width: 35rem;">
            <div class="card-body">
-             <h3><audio controls autoplay><source src="{{data}}" type="audio/mpeg">Your Player does not Support Audio</audio></h3>   
+             <h3><audio controls autoplay><source id="song" src="{{data}}" type="audio/mpeg">Your Player does not Support Audio</audio></h3>   
+              <input type="hidden" id="loc">
              <h5 class="card-title">Song Title : {{card[1]}}</h5>
              <h6 class="card-subtitle">Album : {{card[3]}}</h6><br/>
              <h6 class="card-subtitle">Artist : {{card[4]}}</h6><br/>
+             <button onclick="share()">Share Song.</button>
             </div>
          </div>
        </div>

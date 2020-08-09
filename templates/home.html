@@ -12,7 +12,10 @@
               <h5 class="card-title">Song Title : {{card[1]}}</h5>
               <h6 class="card-subtitle">Album : {{card[3]}}</h6><br/>
               <h6 class="card-subtitle">Artist : {{card[4]}}</h6><br/>
-              <a href="{{card[2]}}" class="btn btn-primary">Go somewhere</a>
+              <form method="GET" action="play">
+                <input type="hidden" name="stamp" value="{{card[2]}}">
+            <input type="submit" value="Play" class="btn btn-primary">
+            </form>
               {% if card[5] == session['user_id'] %}
               <form method="POST" action="delete">
                   <input type="hidden" name="id" value="{{card[0]}}">
